@@ -9,6 +9,50 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    .stats-section {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .stats-section h2 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #333;
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+
+    .stats-section h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: #333;
+    }
+
+    .stats-details p {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+      color: #666;
+    }
+
+    .services-section {
+      padding: 4rem 0;
+    }
+
+    .service-card {
+      padding: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
     }
 
     .bg-dark.text-white {
@@ -98,19 +142,27 @@
       factors.</small>
   </div>
 
-  <div class="container mt-5">
+  <div class="stats-section text-center py-5">
+    <h2>107,037 Painting Jobs Listed so Far</h2>
+    <div class="stats-details mt-3">
+      <p>14,207 House Painters Registered</p>
+      <p>1.1 Million Quotes Compared</p>
+    </div>
+  </div>
+
+  <div class="container services-section">
     <div class="row text-center">
-      <div class="col-md-4">
+      <div class="col-md-4 service-card">
         <img src="images/quality-job.jpg" class="service-img" alt="Quality Painting">
         <h4>QUALITY PAINTING JOBS</h4>
         <p>Our painters are ready to offer competitive quotes. Get quotes instantly.</p>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 service-card">
         <img src="images/any-size.jpg" class="service-img" alt="Any Size Job">
         <h4>ANY SIZE JOB</h4>
         <p>From small apartments to large family homes, no job is too big or small.</p>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 service-card">
         <img src="images/save-money.jpg" class="service-img" alt="Save Money">
         <h4>SAVE MONEY</h4>
         <p>Quotes start as low as $25/hour. Most painters charge $25–$60/hour.</p>
