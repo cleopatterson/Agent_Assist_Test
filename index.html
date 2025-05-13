@@ -38,35 +38,50 @@
     }
 
     .hero {
-      background: url('images/header-image.jpg') center center / cover no-repeat;
-      height: auto;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/header-image.jpg') center center / cover no-repeat;
+      min-height: 400px;
       color: white;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       text-align: left;
-      padding: 3rem 2rem;
+      padding: 4rem 2rem;
     }
 
     .hero h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: bold;
+      margin-bottom: 1.5rem;
+      max-width: 600px;
     }
 
     .hero p {
-      font-size: 1.1rem;
-      margin-top: 1rem;
-      max-width: 700px;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      line-height: 1.6;
     }
 
     .hero small {
       display: block;
-      margin-top: 1rem;
-      font-size: 0.75rem;
+      margin-top: 2rem;
+      font-size: 0.8rem;
       max-width: 600px;
-      color: #f0f0f0;
+      color: #e0e0e0;
+      line-height: 1.4;
     }
 
     .hero .btn {
-      margin-top: 1.5rem;
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      font-size: 1.1rem;
+      border: 2px solid white;
+      transition: all 0.3s ease;
+    }
+
+    .hero .btn:hover {
+      background: white;
+      color: #343a40;
     }
 
     .service-img {
