@@ -1,16 +1,258 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painters Near Me - Get Quotes From a Nearby Painter</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .bg-dark.text-white {
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    .card-title a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .underline {
+      text-decoration: underline;
+    }
+
+    .form-control {
+      margin-bottom: 1rem;
+    }
+
+    .btn-group-toggle .btn {
+      margin-right: 0.5rem;
+    }
+
+    .carousel-inner {
+      padding: 2rem;
+    }
+
+    .hero {
+      background: url('images/header-image.jpg') center center / cover no-repeat;
+      height: auto;
+      color: white;
+      display: block;
+      text-align: left;
+      padding: 3rem 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      max-width: 700px;
+    }
+
+    .hero small {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      max-width: 600px;
+      color: #f0f0f0;
+    }
+
+    .hero .btn {
+      margin-top: 1.5rem;
+    }
+
+    .service-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
 </head>
 
 <body>
-  Hello world
-  <script src="script.js"></script>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Painters Near Me</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active"><a class="nav-link" href="#">HOME</a></li>
+        <li class="nav-item"><a class="nav-link" href="#form">GET QUOTES</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">ABOUT US</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>$25 - $60/hr House Painting Companies</h1>
+    <p>Need a House Painter? Get Obligation-Free House Painting Quotes in Minutes. Save Up To 40% On Your Job.</p>
+    <a href="#form" class="btn btn-outline-light btn-lg">Get Quotes</a>
+    <small>*Published price ranges are indicative only and may vary from actual quotes for a variety of reasons
+      including, but not limited to, seasonality, local demographics and market dynamics, job urgency, and other
+      factors.</small>
+  </div>
+
+  <div class="container mt-5">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <img src="images/quality-job.jpg" class="service-img" alt="Quality Painting">
+        <h4>QUALITY PAINTING JOBS</h4>
+        <p>Our painters are ready to offer competitive quotes. Get quotes instantly.</p>
+      </div>
+      <div class="col-md-4">
+        <img src="images/any-size.jpg" class="service-img" alt="Any Size Job">
+        <h4>ANY SIZE JOB</h4>
+        <p>From small apartments to large family homes, no job is too big or small.</p>
+      </div>
+      <div class="col-md-4">
+        <img src="images/save-money.jpg" class="service-img" alt="Save Money">
+        <h4>SAVE MONEY</h4>
+        <p>Quotes start as low as $25/hour. Most painters charge $25–$60/hour.</p>
+      </div>
+    </div>
+
+    <div id="form" class="row mt-5">
+      <div class="col-md-8">
+        <form>
+          <input type="text" class="form-control" placeholder="Postcode or Suburb" required>
+          <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
+            <label class="btn btn-outline-secondary"><input type="radio" name="starting"> I'm flexible</label>
+            <label class="btn btn-outline-secondary"><input type="radio" name="starting"> In the next few weeks</label>
+            <label class="btn btn-outline-secondary"><input type="radio" name="starting"> Urgently</label>
+            <label class="btn btn-outline-secondary"><input type="radio" name="starting"> Set a date</label>
+          </div>
+          <input type="text" class="form-control" placeholder="Best date for work">
+          <textarea class="form-control" placeholder="Describe the job" rows="5" minlength="20" required></textarea>
+          <input type="email" class="form-control" placeholder="Email address" required>
+          <input type="text" class="form-control" placeholder="First Name" required>
+          <input type="text" class="form-control" placeholder="Contact Number" required>
+          <small>By pressing 'Get Started' you agree to receive quotes and marketing messages and to our <a
+              href="#">Terms & Conditions</a>.</small><br>
+          <button type="submit" class="btn btn-primary mt-3">Get Started</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="about" class="row mt-5">
+      <div class="col-md-12 text-center">
+        <h2>ABOUT US</h2>
+        <p>We focus on customer satisfaction and helping you find the best painter for your job.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript">
+    const FormExtension = {
+      name: 'Forms',
+      type: 'response',
+
+      match: ({trace}) =>
+        trace.type === 'Custom_Form' || trace.payload?.name === 'Custom_Form',
+
+      render: ({element}) => {
+        const formEl = document.createElement('form');
+
+        formEl.innerHTML = `
+          <style>
+            label{font:.8em/1 Poppins;color:#888}
+            input[type=text],input[type=email],input[type=tel]{
+              width:100%;margin:5px 0;padding:8px 0;background:transparent;
+              border:none;border-bottom:.5px solid rgba(0,0,0,.1);outline:0;
+            }
+            .phone{width:150px}
+            @media(max-width:480px){
+              input[type=text],input[type=email],input[type=tel]{
+                font-size:16px!important;line-height:1.3;
+              }
+            }
+            .invalid{border-color:red}
+            .submit{
+              display:inline-block;width:100%;padding:.8rem;border:none;
+              background:#8DD9BF;color:#000;font:.8em/1 Poppins;border-radius:5px;
+              cursor:pointer;text-align:center;
+            }
+            .submit:hover{background:#7CCFB2;transform:scale(1.02);transition:.2s}
+          </style>
+
+          <label>Your name</label>
+          <input type="text"  class="name"   required><br><br>
+
+          <label>Job location</label>
+          <input type="text"  class="suburb" required autocomplete="address-level2"><br><br>
+
+          <label>Your email</label>
+          <input type="email" class="email"  required
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$"><br><br>
+
+          <label>Mobile number</label>
+          <input type="tel"   class="phone"  required pattern="\\d+"><br><br>
+
+          <input type="submit" class="submit" value="Send my details">
+        `;
+
+        formEl.addEventListener('input', () =>
+          ['name', 'email', 'phone', 'suburb'].forEach(c => {
+            const i = formEl.querySelector('.' + c);
+            if (i.checkValidity()) i.classList.remove('invalid');
+          })
+        );
+
+        formEl.addEventListener('submit', e => {
+          e.preventDefault();
+
+          const pick = cls => formEl.querySelector(cls);
+          const name = pick('.name');
+          const email = pick('.email');
+          const phone = pick('.phone');
+          const suburb = pick('.suburb');
+
+          if (![name, email, phone, suburb].every(i => i.checkValidity())) {
+            [name, email, phone, suburb].forEach(i => i.classList.add('invalid'));
+            return;
+          }
+
+          window.voiceflow.chat.interact({
+            type: 'complete',
+            payload: {
+              name: name.value,
+              email: email.value,
+              phone: phone.value,
+              suburb: suburb.value
+            }
+          });
+        });
+
+        element.appendChild(formEl);
+      }
+    };
+
+    (function (d, t) {
+      const v = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+      v.onload = () => window.voiceflow.chat.load({
+        verify: {projectID: '67aaa6a9361d73c432e58ae5'},
+        url: 'https://general-runtime.voiceflow.com',
+        versionID: 'production',
+        assistant: {
+          extensions: [FormExtension],
+          persistence: 'memory',
+          styleSheet: 'https://cdn.jsdelivr.net/gh/cleopatterson/service_seeking@main/vfrc-styles.css'
+        },
+        voice: {url: 'https://runtime-api.voiceflow.com'}
+      });
+      v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
+      v.type = 'text/javascript';
+      s.parentNode.insertBefore(v, s);
+    })(document, 'script');
+  </script>
 </body>
 
 </html>
