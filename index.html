@@ -240,9 +240,8 @@ const FormExtension = {
   document.addEventListener('vf-ready', () => {
     requestAnimationFrame(() => {
       const button = document.getElementById('chatbot-link');
-      if (button && window.voiceflow?.chat?.open && window.voiceflow?.chat?.reset) {
+      if (button && window.voiceflow?.chat?.open) {
         button.addEventListener('click', () => {
-          window.voiceflow.chat.reset();
           window.voiceflow.chat.open();
         });
       }
