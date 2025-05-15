@@ -240,20 +240,20 @@
             
             // Wait for chat to be ready
             setTimeout(() => {
-              window.voiceflow.chat.send({
+              window.voiceflow.chat.interact({
                 type: 'text',
                 payload: description
+              }).then(() => {
+                // Send location after initial message is confirmed sent
+                return window.voiceflow.chat.interact({
+                  type: 'event',
+                  name: 'job_form_submitted',
+                  payload: { job_location: suburb }
+                });
+              }).catch(err => {
+                console.error('Voiceflow send error:', err);
               });
             }, 1000);
-
-            // Send location after initial message
-            setTimeout(() => {
-              window.voiceflow.chat.interact({
-                type: 'event',
-                name: 'job_form_submitted',
-                payload: { job_location: suburb }
-              });
-            }, 2000);
           });
         }
       };
