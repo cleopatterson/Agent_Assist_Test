@@ -342,24 +342,24 @@
             // Allow the widget to fully open before sending values
             setTimeout(() => {
               try {
-                if (window.voiceflow?.chat?.interact) {
+                // First send the job description
+                window.voiceflow.chat.send({
+                  type: 'text',
+                  payload: description
+                });
+
+                // Then send the job location as an event
+                setTimeout(() => {
                   window.voiceflow.chat.interact({
                     type: 'event',
                     name: 'job_form_submitted',
                     payload: { job_location: suburb }
                   });
-                }
-
-                if (window.voiceflow?.chat?.send) {
-                  window.voiceflow.chat.send({
-                    type: 'text',
-                    payload: description
-                  });
-                }
+                }, 500);
               } catch (err) {
                 console.error('Voiceflow send error:', err);
               }
-            }, 500); // slightly longer delay just in case
+            }, 500);
           });
         }
       };
