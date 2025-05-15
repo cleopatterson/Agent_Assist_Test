@@ -203,69 +203,84 @@
   </script>
 
   <script>
-    (function (d, t) {
-      const v = d.createElement(t),
-        s = d.getElementsByTagName(t)[0];
+  (function (d, t) {
+    const v = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+    v.onload = function () {
+      window.voiceflow.chat.load({
+        verify: { projectID: '67aaa6a9361d73c432e58ae5' },
+        url: 'https://general-runtime.voiceflow.com',
+        versionID: 'production',
+        assistant: {
+          extensions: [FormExtension],
+          persistence: 'memory'
+        }
+      });
+      // tell the page we’re ready
+      document.dispatchEvent(new Event('vf-ready'));
+    };
+    v.src  = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.02';
+    v.type = 'text/javascript';
+    s.parentNode.insertBefore(v, s);
+  })(document, 'script');
+  </script>
 
-      v.onload = function () {
-        // 1) load the chat with in-memory (fresh-on-reload) persistence
-        window.voiceflow.chat.load({
-          verify: {projectID: '67aaa6a9361d73c432e58ae5'},
-          url: 'https://general-runtime.voiceflow.com',
-          versionID: 'production',
-          assistant: {
-            extensions: [FormExtension],
-            persistence: 'memory'
-          }
-        });
 
-        // 2) once loaded, wire up your “Get Quotes” button to always reset & open
-        const btn = d.getElementById('chatbot-link');
-        const jobDesc = d.getElementById('job-desc');
-        const jobSuburb = d.getElementById('job-suburb');
+  <script>
+  document.addEventListener('vf-ready', () => {
+    const launchBtn = document.getElementById('chatbot-link');
+    const jobDesc   = document.getElementById('job-desc');
+    const jobSuburb = document.getElementById('job-suburb');
+    const chatRoot  = document.getElementById('voiceflow-chat');
 
-        if (btn && jobDesc && jobSuburb) {
-          btn.addEventListener('click', e => {
-            e.preventDefault();
+    if (!launchBtn || !jobDesc || !jobSuburb || !chatRoot) return;
 
-            const description = jobDesc.value.trim();
-            const suburb = jobSuburb.value.trim();
+    launchBtn.addEventListener('click', e => {
+      e.preventDefault();
 
-            if (!description || !suburb) {
-              alert('Please enter both a job description and postcode.');
+      const description = jobDesc.value.trim();
+      const suburb      = jobSuburb.value.trim();
+
+      if (!description || !suburb) {
+        return alert('Please enter both a job description and postcode.');
+      }
+
+      // 1) open the chat
+      window.voiceflow.chat.open();
+
+      // 2) watch for the exact prompt text
+      const observer = new MutationObserver((mutations, obs) => {
+        for (const m of mutations) {
+          for (const node of m.addedNodes) {
+            if (!(node instanceof HTMLElement)) continue;
+            const txt = node.textContent || '';
+            // match on the key phrase in your prompt
+            if (txt.toLowerCase().includes('what needs to be done')) {
+              obs.disconnect(); // stop observing
+
+              // send the description
+              window.voiceflow.chat.send({
+                type: 'text',
+                payload: description
+              });
+
+              // then send the postcode as an event
+              window.voiceflow.chat.interact({
+                type: 'event',
+                name: 'job_form_submitted',
+                payload: { job_location: suburb }
+              });
               return;
             }
-
-            window.voiceflow.chat.open();
-            
-            // Wait for chat to be ready
-            setTimeout(async () => {
-              try {
-                // First send the job description and wait for it to complete
-                await window.voiceflow.chat.send(description);
-                
-                // Wait a bit before sending the location event
-                setTimeout(() => {
-                  window.voiceflow.chat.interact({
-                    type: 'event',
-                    name: 'job_form_submitted',
-                    payload: { job_location: suburb }
-                  });
-                }, 2000);
-              } catch (err) {
-                console.error('Voiceflow send error:', err);
-              }
-            }, 1000);
-          });
+          }
         }
-      };
+      });
 
-      // bump this when you tweak your HTML/CSS so browsers pull a new copy
-      v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.02';
-      v.type = 'text/javascript';
-      s.parentNode.insertBefore(v, s);
-    })(document, 'script');
+      observer.observe(chatRoot, { childList: true, subtree: true });
+    });
+  });
   </script>
+
 
 
 </body>
