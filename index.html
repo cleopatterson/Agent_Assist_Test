@@ -245,38 +245,23 @@
         return alert('Please enter both a job description and postcode.');
       }
 
-      // 1) open the chat
+      // Open chat and send messages
       window.voiceflow.chat.open();
 
-      // 2) watch for the exact prompt text
-      const observer = new MutationObserver((mutations, obs) => {
-        for (const m of mutations) {
-          for (const node of m.addedNodes) {
-            if (!(node instanceof HTMLElement)) continue;
-            const txt = node.textContent || '';
-            // match on the key phrase in your prompt
-            if (txt.toLowerCase().includes('what needs to be done')) {
-              obs.disconnect(); // stop observing
+      // Wait a moment for chat to initialize
+      setTimeout(() => {
+        // First send the job description
+        window.voiceflow.chat.send(description);
 
-              // send the description
-              window.voiceflow.chat.send({
-                type: 'text',
-                payload: description
-              });
-
-              // then send the postcode as an event
-              window.voiceflow.chat.interact({
-                type: 'event',
-                name: 'job_form_submitted',
-                payload: { job_location: suburb }
-              });
-              return;
-            }
-          }
-        }
-      });
-
-      observer.observe(chatRoot, { childList: true, subtree: true });
+        // Wait a moment before sending location
+        setTimeout(() => {
+          window.voiceflow.chat.interact({
+            type: 'event',
+            name: 'job_form_submitted',
+            payload: { job_location: suburb }
+          });
+        }, 1000);
+      }, 1000);
     });
   });
   </script>
