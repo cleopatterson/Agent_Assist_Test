@@ -88,8 +88,26 @@ body {
   color: #f0f0f0;
 }
 
-.hero .btn {
+.postcode-group {
+  display: flex;
+  gap: 10px;
   margin-top: 1.5rem;
+  max-width: 500px;
+}
+
+.postcode-group input {
+  max-width: 200px;
+  background: rgba(255,255,255,0.9);
+}
+
+@media (max-width: 576px) {
+  .postcode-group {
+    flex-direction: column;
+  }
+  
+  .postcode-group input {
+    max-width: 100%;
+  }
 }
 
 .service-img {
