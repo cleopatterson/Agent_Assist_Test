@@ -96,8 +96,12 @@ body {
 }
 
 .postcode-group input {
-  max-width: 200px;
+  flex: 1;
   background: rgba(255,255,255,0.9);
+}
+
+.postcode-group button {
+  flex: 1;
 }
 
 @media (max-width: 576px) {
