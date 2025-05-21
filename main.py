@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from functools import wraps
 import os
 
-app = Flask(__name__, static_url_path='', static_folder='.')
+app = Flask(__name__, static_folder='.')
 app.secret_key = os.urandom(24)
 
 def login_required(f):
