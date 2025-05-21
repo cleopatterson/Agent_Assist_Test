@@ -17,7 +17,7 @@ def login_required(f):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        if request.form['password'] == 'your-secure-password':  # Change this!
+        if request.form['password'] == 'serviceseeking':
             session['logged_in'] = True
             return redirect(url_for('home'))
         return 'Invalid password'
