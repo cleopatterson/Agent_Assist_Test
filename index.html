@@ -32,7 +32,7 @@
 
 
     <div class="postcode-group">
-      <input type="text" id="postcode" class="form-control" placeholder="Enter postcode" maxlength="4">
+      <input type="text" id="postcode" class="form-control" placeholder="Postcode" maxlength="4">
       <button id="chatbot-link" class="btn btn-lg" style="background:#40BF94;color:#fff;border:none;">
         Get Quotes
       </button>
@@ -177,7 +177,7 @@
             type: 'complete',
             payload: {
               name: name.value, email: email.value,
-              phone: phone.value, suburb: suburb.value
+              phone: phone.value
             }
           });
         });
@@ -192,48 +192,50 @@
   <script>
     (function (d, t) {
       const v = d.createElement(t),
-        s = d.getElementsByTagName(t)[0];
+            s = d.getElementsByTagName(t)[0];
 
       v.onload = function () {
-        const postcode = document.getElementById('postcode').value;
         window.voiceflow.chat.load({
-          verify: {projectID: '67aaa6a9361d73c432e58ae5'},
+          verify: { projectID: '67aaa6a9361d73c432e58ae5' },
           url: 'https://general-runtime.voiceflow.com',
           versionID: 'production',
-          launch: {
-            event: {
-              type: "launch",
-              payload: {
-                postcode: postcode
-              }
-            }
-          },
           assistant: {
-            extensions: [FormExtension],
             persistence: 'memory',
+            extensions  : [FormExtension]
           }
-        }
         });
-      // Signal when ready
-      document.dispatchEvent(new Event('vf-ready'));
-    };
-    v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.03';
-    v.type = 'text/javascript';
-    s.parentNode.insertBefore(v, s);
-    }) (document, 'script');
+
+        // Signal when ready
+        document.dispatchEvent(new Event('vf-ready'));
+      };
+
+      v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.03';
+      v.type = 'text/javascript';
+      s.parentNode.insertBefore(v, s);
+    })(document, 'script');
   </script>
 
-  /* launcher */
   <script>
     document.addEventListener('vf-ready', () => {
       const btn = document.getElementById('chatbot-link');
       if (!btn) return;
-      btn.addEventListener('click', e => {
+
+      btn.addEventListener('click', async e => {
         e.preventDefault();
+        const postcode = document.getElementById('postcode')?.value || 'unknown';
+
+        // Send launch event payload
+        await window.voiceflow.chat.interact({
+          type: 'launch',
+          payload: { postcode }
+        });
+
+        // Open chat AFTER launch event
         window.voiceflow.chat.open();
       });
     });
   </script>
+
 
 
 
