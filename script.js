@@ -1,32 +1,4 @@
-// Hide content immediately
-document.body.style.display = 'none';
-
-const DEMO_PASSWORD = 'serviceseeking2024';
-
-function checkAuthentication() {
-    if (localStorage.getItem('authenticated') === 'true') {
-        document.body.style.display = 'block';
-        return true;
-    }
-    return false;
-}
-
-function promptPassword() {
-    const password = prompt('Please enter the password to access this demo:');
-    if (password === DEMO_PASSWORD) {
-        localStorage.setItem('authenticated', 'true');
-        document.body.style.display = 'block';
-        return true;
-    }
-    alert('Incorrect password');
-    return false;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-    if (!checkAuthentication()) {
-        promptPassword();
-    }
-    
     const postcodeInput = document.getElementById('postcode');
     const chatbotBtn = document.getElementById('chatbot-link');
 
