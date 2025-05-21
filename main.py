@@ -1,32 +1,19 @@
-
 from flask import Flask, render_template, request, session, redirect, url_for
-from functools import wraps
 import os
 
 app = Flask(__name__, static_folder='.')
 app.secret_key = os.urandom(24)
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'logged_in' not in session:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        if request.form['password'] == 'serviceseeking':
-            session['logged_in'] = True
-            return redirect(url_for('home'))
-        return 'Invalid password'
-    return render_template('login.html')
-
 @app.route('/')
-@login_required
 def home():
-    return render_template('index.html')
+    user_id = request.headers.get('X-Replit-User-Id')
+    if not user_id:
+        return render_template('login.html')
+    return render_template('index.html',
+        user_id=user_id,
+        user_name=request.headers.get('X-Replit-User-Name'),
+        user_roles=request.headers.get('X-Replit-User-Roles')
+    )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
