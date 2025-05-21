@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>Painters Near Me – Get Quotes From a Nearby Painter</title>
 
   <!-- Bootstrap CSS -->
@@ -192,16 +193,16 @@
   <script>
     (function (d, t) {
       const v = d.createElement(t),
-            s = d.getElementsByTagName(t)[0];
+        s = d.getElementsByTagName(t)[0];
 
       v.onload = function () {
         window.voiceflow.chat.load({
-          verify: { projectID: '67aaa6a9361d73c432e58ae5' },
+          verify: {projectID: '67aaa6a9361d73c432e58ae5'},
           url: 'https://general-runtime.voiceflow.com',
           versionID: 'production',
           assistant: {
             persistence: 'memory',
-            extensions  : [FormExtension]
+            extensions: [FormExtension]
           }
         });
 
@@ -227,7 +228,7 @@
         // Send launch event payload
         await window.voiceflow.chat.interact({
           type: 'launch',
-          payload: { postcode }
+          payload: {postcode}
         });
 
         // Open chat AFTER launch event
