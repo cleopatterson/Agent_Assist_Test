@@ -1,37 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
     const postcodeInput = document.getElementById('postcode');
     const chatbotBtn = document.getElementById('chatbot-link');
+    
+    // Initially disable the button
+    chatbotBtn.disabled = true;
+    chatbotBtn.style.opacity = '0.5';
 
     postcodeInput.addEventListener('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
         validatePostcode();
     });
 
-    let hasAttemptedSubmit = false;
-
     function validatePostcode() {
         const postcode = postcodeInput.value;
         const postcodeNum = parseInt(postcode);
         const messageDiv = document.getElementById('postcode-message') || createMessageDiv();
         
-        if (!hasAttemptedSubmit) {
-            messageDiv.style.display = 'none';
-            return;
-        }
-        
-        if (!postcode) {
-            messageDiv.textContent = 'Please enter your postcode';
-            messageDiv.style.display = 'block';
-            chatbotBtn.disabled = true;
-        } else if (postcodeNum < 2000 || postcodeNum > 2999) {
-            messageDiv.textContent = 'Please enter a valid Sydney postcode (2000-2999)';
-            messageDiv.style.display = 'block';
-            chatbotBtn.disabled = true;
-        } else {
-            messageDiv.style.display = 'none';
+        if (postcode.length === 4) {
             chatbotBtn.disabled = false;
+            chatbotBtn.style.opacity = '1';
+            
+            if (postcodeNum < 2000 || postcodeNum > 2999) {
+                messageDiv.textContent = 'Please enter a valid Sydney postcode (2000-2999)';
+                messageDiv.style.display = 'block';
+            } else {
+                messageDiv.style.display = 'none';
+            }
+        } else {
+            chatbotBtn.disabled = true;
+            chatbotBtn.style.opacity = '0.5';
+            messageDiv.style.display = 'none';
         }
-        chatbotBtn.style.opacity = chatbotBtn.disabled ? '0.5' : '1';
     }
 
     function createMessageDiv() {
