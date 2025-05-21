@@ -113,7 +113,9 @@ body {
     flex-direction: column;
   }
   
-  .postcode-group input {
+  .postcode-group input,
+  .postcode-group button {
+    width: 100%;
     max-width: 100%;
   }
 }
