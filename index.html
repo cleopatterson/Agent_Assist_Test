@@ -223,7 +223,12 @@
 
       btn.addEventListener('click', async e => {
         e.preventDefault();
-        const postcode = document.getElementById('postcode')?.value || 'unknown';
+        const postcode = document.getElementById('postcode')?.value;
+        const postcodeNum = parseInt(postcode);
+        
+        if (!postcode || postcodeNum < 2000 || postcodeNum > 2999) {
+          return;
+        }
 
         // Send launch event payload
         await window.voiceflow.chat.interact({
