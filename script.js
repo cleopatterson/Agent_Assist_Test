@@ -7,10 +7,17 @@ document.addEventListener('DOMContentLoaded', function() {
         validatePostcode();
     });
 
+    let hasAttemptedSubmit = false;
+
     function validatePostcode() {
         const postcode = postcodeInput.value;
         const postcodeNum = parseInt(postcode);
         const messageDiv = document.getElementById('postcode-message') || createMessageDiv();
+        
+        if (!hasAttemptedSubmit) {
+            messageDiv.style.display = 'none';
+            return;
+        }
         
         if (!postcode) {
             messageDiv.textContent = 'Please enter your postcode';
@@ -38,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     chatbotBtn.addEventListener('click', function(e) {
+        hasAttemptedSubmit = true;
         const postcode = postcodeInput.value;
         const postcodeNum = parseInt(postcode);
         
