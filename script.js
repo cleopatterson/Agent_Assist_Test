@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Check for password protection
+    if (!sessionStorage.getItem('authenticated')) {
+        fetch('/.replit/secrets.json')
+            .then(response => response.json())
+            .then(secrets => {
+                const password = prompt("Please enter the password to view this site:");
+                if (password === secrets.SITE_PASSWORD) {
+                    sessionStorage.setItem('authenticated', 'true');
+                } else {
+                    alert("Incorrect password");
+                    document.body.style.display = 'none';
+                    location.reload();
+                    return;
+                }
+            })
+            .catch(() => {
+                console.error('Error loading secrets');
+            });
+    }
+
     const postcodeInput = document.getElementById('postcode');
     const chatbotBtn = document.getElementById('chatbot-link');
 
