@@ -30,16 +30,6 @@
     <h1>$25 – $60/hr House Painting Companies</h1>
     <p>Need a House Painter? Get obligation‑free house‑painting quotes in minutes. Save up to 40% on your job.</p>
 
-    <!-- <div class="row mt-3" style="max-width: 700px;">
-      <div class="col-md-8 pr-md-2">
-        <input id="job-desc" type="text" class="form-control" placeholder="Tell us a little about your job"
-          style="background: rgba(255,255,255,0.9);">
-      </div>
-      <div class="col-md-4 pl-md-2">
-        <input id="job-suburb" type="text" class="form-control" placeholder="Postcode"
-          style="background: rgba(255,255,255,0.9);">
-      </div>
-    </div> -->
 
     <div class="postcode-group">
       <input type="text" id="postcode" class="form-control" placeholder="Enter postcode" maxlength="4">
@@ -111,7 +101,8 @@
       </div>
     </div>
   </div>
-
+  <div id="chat-anchor" style="position: relative;"></div>
+  
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -219,13 +210,13 @@
           assistant: {
             extensions: [FormExtension],
             persistence: 'memory',
+            }
             // stylesheet: 'https://cdn.jsdelivr.net/gh/cleopatterson/service_seeking@main/vfrc-styles.css'
           }
         });
         // Signal when ready
         document.dispatchEvent(new Event('vf-ready'));
       };
-
       v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.03';
       v.type = 'text/javascript';
       s.parentNode.insertBefore(v, s);
