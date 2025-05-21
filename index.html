@@ -203,10 +203,19 @@
             s = d.getElementsByTagName(t)[0];
 
       v.onload = function () {
+        const postcode = document.getElementById('postcode').value;
         window.voiceflow.chat.load({
           verify: { projectID: '67aaa6a9361d73c432e58ae5' },
           url: 'https://general-runtime.voiceflow.com',
           versionID: 'production',
+          launch: {
+            event: {
+              type: "launch",
+              payload: {
+                postcode: postcode
+              }
+            }
+          },
           assistant: {
             extensions: [FormExtension],
             persistence: 'memory',
