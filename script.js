@@ -1,22 +1,23 @@
 
 const PASSWORD = "serviceseeking";
 
+// Hide content immediately
+document.body.style.visibility = 'hidden';
+
 function checkPassword() {
     const password = prompt("Please enter the password to view this site:");
-    if (password !== PASSWORD) {
+    if (!password || password !== PASSWORD) {
         alert("Incorrect password");
         checkPassword();
         return false;
     }
+    document.body.style.visibility = 'visible';
     return true;
 }
 
 // Check password before loading content
 document.addEventListener('DOMContentLoaded', function() {
-    if (!checkPassword()) {
-        document.body.style.display = 'none';
-        return;
-    }
+    checkPassword();
     
     const postcodeInput = document.getElementById('postcode');
     const chatbotBtn = document.getElementById('chatbot-link');
