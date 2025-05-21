@@ -102,7 +102,7 @@
     </div>
   </div>
   <div id="chat-anchor" style="position: relative;"></div>
-  
+
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -144,9 +144,6 @@
       <label>Your name</label>
       <input type="text"  class="name"   required><br><br>
 
-      <label>Job location</label>
-      <input type="text"  class="suburb" required autocomplete="address-level2"><br><br>
-
       <label>Your email</label>
       <input type="email" class="email"  required
              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$"><br><br>
@@ -159,7 +156,7 @@
 
         /* live validation */
         formEl.addEventListener('input', () =>
-          ['name', 'email', 'phone', 'suburb'].forEach(c => {
+          ['name', 'email', 'phone'].forEach(c => {
             const i = formEl.querySelector('.' + c);
             if (i.checkValidity()) i.classList.remove('invalid');
           }));
@@ -167,20 +164,15 @@
         formEl.addEventListener('submit', e => {
           e.preventDefault();
           const pick = cls => formEl.querySelector(cls);
-          const [name, email, phone, suburb] =
-            ['.name', '.email', '.phone', '.suburb'].map(pick);
+          const [name, email, phone] =
+            ['.name', '.email', '.phone'].map(pick);
 
-          if (![name, email, phone, suburb].every(i => i.checkValidity())) {
-            [name, email, phone, suburb].forEach(i => i.classList.add('invalid'));
+          if (![name, email, phone].every(i => i.checkValidity())) {
+            [name, email, phone].forEach(i => i.classList.add('invalid'));
             return;
           }
 
-          formEl.style.display = 'none';
-          const ack = document.createElement('div');
-          ack.textContent = 'Thanks – got your details!';
-          ack.style.font = '0.9em/1.3 Poppins,sans-serif';
-          element.appendChild(ack);
-
+          formEl.querySelector('.submit').remove();
           window.voiceflow.chat.interact({
             type: 'complete',
             payload: {
@@ -200,12 +192,12 @@
   <script>
     (function (d, t) {
       const v = d.createElement(t),
-            s = d.getElementsByTagName(t)[0];
+        s = d.getElementsByTagName(t)[0];
 
       v.onload = function () {
         const postcode = document.getElementById('postcode').value;
         window.voiceflow.chat.load({
-          verify: { projectID: '67aaa6a9361d73c432e58ae5' },
+          verify: {projectID: '67aaa6a9361d73c432e58ae5'},
           url: 'https://general-runtime.voiceflow.com',
           versionID: 'production',
           launch: {
@@ -219,17 +211,16 @@
           assistant: {
             extensions: [FormExtension],
             persistence: 'memory',
-            }
-            // stylesheet: 'https://cdn.jsdelivr.net/gh/cleopatterson/service_seeking@main/vfrc-styles.css'
           }
+        }
         });
-        // Signal when ready
-        document.dispatchEvent(new Event('vf-ready'));
-      };
-      v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.03';
-      v.type = 'text/javascript';
-      s.parentNode.insertBefore(v, s);
-    })(document, 'script');
+      // Signal when ready
+      document.dispatchEvent(new Event('vf-ready'));
+    };
+    v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.03';
+    v.type = 'text/javascript';
+    s.parentNode.insertBefore(v, s);
+    }) (document, 'script');
   </script>
 
   /* launcher */
