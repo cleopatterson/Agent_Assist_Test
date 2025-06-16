@@ -191,62 +191,57 @@
   </script>
 
 
-  <script>
-    (function (d, t) {
-      const v = d.createElement(t),
-        s = d.getElementsByTagName(t)[0];
-
-      v.onload = function () {
-        window.voiceflow.chat.load({
-          verify: {projectID: '67aaa6a9361d73c432e58ae5'},
-          url: 'https://general-runtime.voiceflow.com',
-          versionID: 'production',
-          assistant: {
-            persistence: 'memory',
-            extensions: [FormExtension]
-          },
-          styles: '/style.css'
-        });
-
-        // Signal when ready
-        document.dispatchEvent(new Event('vf-ready'));
-      };
-
-      v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.03';
-      v.type = 'text/javascript';
-      s.parentNode.insertBefore(v, s);
-    })(document, 'script');
-  </script>
 
   <script>
-    document.addEventListener('vf-ready', () => {
-      const btn = document.getElementById('chatbot-link');
-      if (!btn) return;
-
-      btn.addEventListener('click', async e => {
-        e.preventDefault();
-        const postcode = document.getElementById('postcode')?.value;
-        const postcodeNum = parseInt(postcode);
-        
-        if (!postcode || postcodeNum < 2000 || postcodeNum > 2999) {
-          return;
-        }
-
-        // Send launch event payload
-        await window.voiceflow.chat.interact({
-          type: 'launch',
-          payload: {postcode}
-        });
-
-        // Open chat AFTER launch event
-        window.voiceflow.chat.open();
+    /* ───────────────────────────────
+    “GET QUOTES” CLICK HANDLER
+    ─────────────────────────────── */
+    document.getElementById('chatbot-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      /* 1️⃣ validate postcode */
+      const postcode = document.getElementById('postcode')?.value.trim();
+      const n = Number(postcode);
+      if (!postcode || n < 2000 || n > 2999) {
+        alert('Please enter a valid NSW postcode (2000–2999)');
+        return;
+      }
+      /* 2️⃣ build modal wrapper (backdrop ▸ modal ▸ VF embed) */
+      const backdrop = Object.assign(document.createElement('div'), {id: 'vf-modal-backdrop'});
+      const modal = Object.assign(document.createElement('div'), {id: 'vf-modal'});
+      const embedDiv = Object.assign(document.createElement('div'), {id: 'vf-embed'});
+      const closeBtn = Object.assign(document.createElement('button'), {
+        id: 'vf-modal-close', innerHTML: '&times;',
+        onclick: () => backdrop.remove() // ← always just close
       });
+
+      modal.append(closeBtn, embedDiv);
+      backdrop.append(modal);
+      document.body.append(backdrop);
+
+      /* 3️⃣ inject VF script + load widget once */
+      (function (d, t) {
+        const v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        v.onload = function () {
+          window.voiceflow.chat.load({
+            verify: {projectID: '67aaa6a9361d73c432e58ae5'},
+            url: 'https://general-runtime.voiceflow.com',
+            versionID: 'production',
+            launch: {event: {type: 'launch', payload: {postcode}}},
+            render: {mode: 'embedded', target: embedDiv},
+            autostart: true,
+            assistant: {
+              persistence: 'memory',
+              extensions: [FormExtension],
+              stylesheet: '/style.css'
+            }
+          });
+        };
+        v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.04&t=' + Date.now();
+        v.type = 'text/javascript';
+        s.parentNode.insertBefore(v, s);
+      })(document, 'script');
     });
   </script>
-
-
-
-
 
 </body>
 

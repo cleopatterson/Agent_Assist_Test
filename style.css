@@ -1,4 +1,3 @@
-
 body {
   font-family: Arial, sans-serif;
   color: #333;
@@ -97,7 +96,7 @@ body {
 
 .postcode-group input {
   width: 120px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   height: 48px;
   padding: 0 15px;
 }
@@ -112,7 +111,7 @@ body {
   .postcode-group {
     flex-direction: column;
   }
-  
+
   .postcode-group input,
   .postcode-group button {
     width: 100%;
@@ -126,7 +125,125 @@ body {
   object-fit: cover;
 }
 
-/* Hide Voiceflow launcher button */
-.vfrc-launcher {
+/* ─────────  VOICEFLOW  ───────── */
+
+/* hide Voiceflow’s floating launcher + header utility buttons */
+.vfrc-launcher,
+.vfrc-header--button {
   display: none !important;
+}
+
+/* ───────── desktop / tablet ───────── */
+#vf-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#vf-modal {
+  width: 760px;
+  height: 560px;
+  /* desktop card ☞ 760×560 */
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+  overflow: hidden;
+  position: relative;
+}
+
+#vf-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  border: none;
+  background: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* embed container fills modal (desktop) */
+#vf-embed {
+  position: absolute;
+  inset: 0;
+}
+
+/* Normalize base font size */
+.markdown,
+.vfrc-message,
+.vfrc-user-response,
+.vfrc-input-container,
+.vfrc-choice,
+.vfrc-button {
+  font-size: 1rem !important;
+  line-height: 1.4;
+}
+
+/* Override obfuscated class on user message text */
+.vfrc-user-response ._15emaa41 {
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Normalize input box */
+.vfrc-chat-input {
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+
+
+
+/* ───────── mobile tweaks ───────── */
+@media (max-width:600px) {
+
+  /* full-screen sheet that resizes with the keyboard */
+  #vf-modal {
+    width: 100vw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+  }
+
+  /* let embed fill flex space and manage its own scroll */
+  #vf-embed {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* make root / scroll area stretch */
+  #vf-embed .vfrc-root,
+  #vf-embed .vfrc-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #vf-embed .vfrc-scrollable {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  /* bottom safe-area so composer clears the home indicator */
+  #vf-embed .vfrc-input-container {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* bigger × target */
+  #vf-modal-close {
+    top: 10px;
+    right: 14px;
+    font-size: 26px;
+  }
 }
