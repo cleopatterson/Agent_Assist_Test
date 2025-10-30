@@ -1,5 +1,22 @@
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if already authenticated
+    if (!sessionStorage.getItem('authenticated')) {
+        // Hide main content
+        document.body.style.display = 'none';
+        
+        // Show password prompt
+        const password = prompt('Please enter password to access the site:');
+        
+        if (password === 'serviceseeking') {
+            sessionStorage.setItem('authenticated', 'true');
+            document.body.style.display = 'block';
+        } else {
+            alert('Incorrect password');
+            window.location.reload();
+        }
+    }
+
     const postcodeInput = document.getElementById('postcode');
     const chatbotBtn = document.getElementById('chatbot-link');
     
