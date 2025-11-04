@@ -1,111 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget Test Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <h1>Widget Test Page</h1>
-    <p>This is a simple placeholder page for testing the Voiceflow widget below.</p>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Painters Near Me – Widget Test</title>
 
-    <script>
-(function(d, t) {
-    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    v.onload = function() {
-      const FileUploadExtension = {
-        name: 'FileUpload',
-        type: 'response',
-        match: ({ trace }) =>
-          trace.type === 'ext_fileUpload' || trace.payload?.name === 'ext_fileUpload',
-        render: ({ trace, element }) => {
-          const fileUploadContainer = document.createElement('div')
-          fileUploadContainer.innerHTML = `
-            <style>
-              .my-file-upload {
-                border: 2px dashed rgba(46, 110, 225, 0.3);
-                padding: 20px;
-                text-align: center;
-                cursor: pointer;
-              }
-            </style>
-            <div class='my-file-upload'>Drag and drop a file here or click to upload</div>
-            <input type='file' style='display: none;'>
-          `
-          const fileInput = fileUploadContainer.querySelector('input[type=file]')
-          const fileUploadBox = fileUploadContainer.querySelector('.my-file-upload')
-          fileUploadBox.addEventListener('click', function () {
-            fileInput.click()
-          })
-          fileInput.addEventListener('change', function () {
-            const file = fileInput.files[0]
-            console.log('File selected:', file)
-            fileUploadContainer.innerHTML = \`<img src="https://s3.amazonaws.com/com.voiceflow.studio/share/upload/upload.gif" alt="Upload" width="50" height="50">\`
-            var data = new FormData()
-            data.append('file', file)
-            fetch('https://tmpfiles.org/api/v1/upload', {
-              method: 'POST',
-              body: data,
-            })
-              .then((response) => {
-                if (response.ok) {
-                  return response.json()
-                } else {
-                  throw new Error('Upload failed: ' + response.statusText)
-                }
-              })
-              .then((result) => {
-                fileUploadContainer.innerHTML =
-                  '<img src="https://s3.amazonaws.com/com.voiceflow.studio/share/check/check.gif" alt="Done" width="50" height="50">'
-                console.log('File uploaded:', result.data.url)
-                window.voiceflow.chat.interact({
-                  type: 'complete',
-                  payload: {
-                    file: result.data.url.replace(
-                      'https://tmpfiles.org/',
-                      'https://tmpfiles.org/dl/'
-                    ),
-                  },
-                })
-              })
-              .catch((error) => {
-                console.error(error)
-                fileUploadContainer.innerHTML = '<div>Error during upload</div>'
-              })
-          })
-          element.appendChild(fileUploadContainer)
-        },
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- ────────────  HERO  ──────────── -->
+  <div class="hero">
+    <h1>$25 – $60/hr House Painting Companies</h1>
+    <p>Need a House Painter? Get obligation‑free house‑painting quotes in minutes. Save up to 40% on your job.</p>
+
+    <div class="postcode-group">
+      <input type="text" id="postcode" class="form-control" placeholder="Postcode" maxlength="4">
+      <button id="chatbot-link" class="btn btn-lg" style="background:#40BF94;color:#fff;border:none;">
+        Get Quotes
+      </button>
+    </div>
+
+    <small>*Published price ranges are indicative only and may vary from actual quotes and other factors.</small>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ────────────  VOICEFLOW EXTENSION + LOADER  ──────────── -->
+  <script>
+    /* in‑chat mini‑form */
+    const FormExtension = {
+      name: 'Forms',
+      type: 'response',
+      match: ({trace}) =>
+        trace.type === 'Custom_Form' || trace.payload?.name === 'Custom_Form',
+
+      render: ({element}) => {
+        const formEl = document.createElement('form');
+
+        formEl.innerHTML = `
+      <style>
+        label{font:.8em/1 Poppins;color:#888}
+        input[type=text],input[type=email],input[type=tel]{
+          width:100%;margin:5px 0;padding:8px 0;background:transparent;
+          border:none;border-bottom:.5px solid rgba(0,0,0,.1);outline:0;
+        }
+        .phone{width:150px}
+        @media(max-width:480px){
+          input[type=text],input[type=email],input[type=tel]{
+            font-size:16px!important;line-height:1.3;
+          }
+        }
+        .invalid{border-color:red}
+        .submit{
+          display:inline-block;width:100%;padding:.8rem;border:none;
+          background:#8DD9BF;color:#000;font:.8em/1 Poppins;border-radius:5px;
+          cursor:pointer;text-align:center;
+        }
+        .submit:hover{background:#7CCFB2;transform:scale(1.02);transition:.2s}
+      </style>
+
+      <label>Your name</label>
+      <input type="text"  class="name"   required><br><br>
+
+      <label>Your email</label>
+      <input type="email" class="email"  required
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$"><br><br>
+
+      <label>Mobile number</label>
+      <input type="tel"   class="phone"  required pattern="\\d+"><br><br>
+
+      <input type="submit" class="submit" value="Send my details">
+    `;
+
+        /* live validation */
+        formEl.addEventListener('input', () =>
+          ['name', 'email', 'phone'].forEach(c => {
+            const i = formEl.querySelector('.' + c);
+            if (i.checkValidity()) i.classList.remove('invalid');
+          }));
+
+        formEl.addEventListener('submit', e => {
+          e.preventDefault();
+          const pick = cls => formEl.querySelector(cls);
+          const [name, email, phone] =
+            ['.name', '.email', '.phone'].map(pick);
+
+          if (![name, email, phone].every(i => i.checkValidity())) {
+            [name, email, phone].forEach(i => i.classList.add('invalid'));
+            return;
+          }
+
+          formEl.querySelector('.submit').remove();
+          window.voiceflow.chat.interact({
+            type: 'complete',
+            payload: {
+              name: name.value, email: email.value,
+              phone: phone.value
+            }
+          });
+        });
+
+        element.appendChild(formEl);
       }
-      
-      window.voiceflow.chat.load({
-        verify: { projectID: '686df5a49878c43b131f00e6' },
-        url: 'https://general-runtime.voiceflow.com',
-        versionID: 'production',
-        voice: {
-          url: "https://runtime-api.voiceflow.com"
-        },
-        extensions: [FileUploadExtension]
+    };
+
+  </script>
+
+  <script>
+    /* ───────────────────────────────
+    "GET QUOTES" CLICK HANDLER
+    ─────────────────────────────── */
+    document.getElementById('chatbot-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      /* 1️⃣ validate postcode */
+      const postcode = document.getElementById('postcode')?.value.trim();
+      const n = Number(postcode);
+      if (!postcode || n < 2000 || n > 2999) {
+        alert('Please enter a valid NSW postcode (2000–2999)');
+        return;
+      }
+      /* 2️⃣ build modal wrapper (backdrop ▸ modal ▸ VF embed) */
+      const backdrop = Object.assign(document.createElement('div'), {id: 'vf-modal-backdrop'});
+      const modal = Object.assign(document.createElement('div'), {id: 'vf-modal'});
+      const embedDiv = Object.assign(document.createElement('div'), {id: 'vf-embed'});
+      const closeBtn = Object.assign(document.createElement('button'), {
+        id: 'vf-modal-close', innerHTML: '&times;',
+        onclick: () => backdrop.remove() // ← always just close
       });
-    }
-    v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; 
-    v.type = "text/javascript"; 
-    s.parentNode.insertBefore(v, s);
-})(document, 'script');
-    </script>
+
+      modal.append(closeBtn, embedDiv);
+      backdrop.append(modal);
+      document.body.append(backdrop);
+
+      /* 3️⃣ inject VF script + load widget once */
+      (function (d, t) {
+        const v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        v.onload = function () {
+          window.voiceflow.chat.load({
+            verify: {projectID: '686df5a49878c43b131f00e6'},
+            url: 'https://general-runtime.voiceflow.com',
+            versionID: 'development',
+            launch: {event: {type: 'launch', payload: {postcode}}},
+            render: {mode: 'embedded', target: embedDiv},
+            autostart: true,
+            assistant: {
+              persistence: 'memory',
+              extensions: [FormExtension],
+              stylesheet: 'style.css'
+            }
+          });
+
+          // Add image upload button after widget loads
+          setTimeout(function() {
+            if (window.addVoiceflowImageUpload) {
+              window.addVoiceflowImageUpload();
+            }
+          }, 1000);
+        };
+        v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs?v=1.04&t=' + Date.now();
+        v.type = 'text/javascript';
+        s.parentNode.insertBefore(v, s);
+      })(document, 'script');
+    });
+  </script>
+
+  <!-- Image Upload Integration -->
+  <script src="voiceflow-image-upload-integration.js"></script>
+
 </body>
+
 </html>
