@@ -144,26 +144,29 @@
         display: flex;
       }
 
-      #custom-upload-btn:hover {
-        background: #40BF94;
-        color: white;
-      }
+      /* Only apply hover effects on devices with hover capability (desktop) */
+      @media (hover: hover) and (pointer: fine) {
+        #custom-upload-btn:hover {
+          background: #40BF94;
+          color: white;
+        }
 
-      #custom-upload-btn:hover::after {
-        content: 'Upload photo';
-        position: absolute;
-        bottom: calc(100% + 8px);
-        left: 50%;
-        transform: translateX(-50%);
-        background: #40BF94;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 13px;
-        white-space: nowrap;
-        font-family: Arial, sans-serif;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        z-index: 1000;
+        #custom-upload-btn:hover::after {
+          content: 'Upload photo';
+          position: absolute;
+          bottom: calc(100% + 8px);
+          left: 50%;
+          transform: translateX(-50%);
+          background: #40BF94;
+          color: white;
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-size: 13px;
+          white-space: nowrap;
+          font-family: Arial, sans-serif;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          z-index: 1000;
+        }
       }
 
       #custom-upload-btn.hidden {
