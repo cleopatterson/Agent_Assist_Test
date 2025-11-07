@@ -27,8 +27,7 @@
     MAX_IMAGE_SIZE: 800,        // Max pixels on longest side
     JPEG_QUALITY: 0.7,          // 0-1 compression quality
     MAX_ATTEMPTS: 40,           // Widget detection attempts
-    ATTEMPT_INTERVAL: 500,      // ms between attempts
-    ANALYSIS_PROMPT: "In 2-3 concise sentences, describe: 1) What type of surface (e.g., fence, walls, ceiling) and material (wood, brick, concrete, etc.), 2) Estimated size/scope (e.g., fence length in meters, room dimensions, number of rooms), 3) Current condition (damage, peeling, stains, weathering)."
+    ATTEMPT_INTERVAL: 500       // ms between attempts
   };
 
   // ============================================================================
@@ -99,7 +98,6 @@
           name: 'analyze_image',
           arguments: {
             image_data: imageData,
-            question: CONFIG.ANALYSIS_PROMPT,
             create_permanent_url: true  // Get permanent URL for HubSpot
           }
         }
@@ -125,13 +123,13 @@
     style.textContent = `
       #custom-upload-btn {
         position: absolute;
-        right: 72px;
-        bottom: 42px;
-        width: 40px;
-        height: 40px;
+        right: 76px;
+        bottom: 45px;
+        width: 32px;
+        height: 32px;
         background: transparent;
         border: none;
-        border-radius: 8px;
+        border-radius: 50%;
         cursor: pointer;
         display: none;
         align-items: center;
@@ -147,8 +145,25 @@
       }
 
       #custom-upload-btn:hover {
-        background: rgba(0, 0, 0, 0.04);
-        color: #6B7280;
+        background: #40BF94;
+        color: white;
+      }
+
+      #custom-upload-btn:hover::after {
+        content: 'Upload photo';
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #40BF94;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        white-space: nowrap;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        z-index: 1000;
       }
 
       #custom-upload-btn.hidden {
@@ -170,8 +185,9 @@
       /* Upload status indicator */
       .upload-status {
         position: fixed;
-        bottom: 140px;
-        right: 20px;
+        bottom: 130px;
+        left: 50%;
+        transform: translateX(-50%);
         background: white;
         border-radius: 8px;
         padding: 12px 16px;
@@ -266,10 +282,13 @@
         // Create the upload button
         const uploadBtn = document.createElement('button');
         uploadBtn.id = 'custom-upload-btn';
-        uploadBtn.setAttribute('aria-label', 'Upload image');
+        uploadBtn.setAttribute('aria-label', 'Upload photo');
         uploadBtn.innerHTML = `
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.6 6H18.4C19.4048 6 20.0683 6.00117 20.5766 6.0427C21.0675 6.08281 21.2803 6.15295 21.408 6.21799C21.7843 6.40973 22.0903 6.71569 22.282 7.09202C22.3471 7.21966 22.4172 7.43248 22.4573 7.92336C22.4988 8.43174 22.5 9.09522 22.5 10.1V18.9C22.5 19.9048 22.4988 20.5683 22.4573 21.0766C22.4172 21.5675 22.3471 21.7803 22.282 21.908C22.0903 22.2843 21.7843 22.5903 21.408 22.782C21.2803 22.8471 21.0675 22.9172 20.5766 22.9573C20.0683 22.9988 19.4048 23 18.4 23H5.6C4.59522 23 3.93174 22.9988 3.42336 22.9573C2.93248 22.9172 2.71966 22.8471 2.59202 22.782C2.21569 22.5903 1.90973 22.2843 1.71799 21.908C1.65295 21.7803 1.58281 21.5675 1.5427 21.0766C1.50117 20.5683 1.5 19.9048 1.5 18.9V10.1C1.5 9.09522 1.50117 8.43174 1.5427 7.92336C1.58281 7.43248 1.65295 7.21966 1.71799 7.09202C1.90973 6.71569 2.21569 6.40973 2.59202 6.21799C2.71966 6.15295 2.93248 6.08281 3.42336 6.0427C3.93174 6.00117 4.59522 6 5.6 6ZM9 10.5C9 11.3284 8.32843 12 7.5 12C6.67157 12 6 11.3284 6 10.5C6 9.67157 6.67157 9 7.5 9C8.32843 9 9 9.67157 9 10.5ZM3 16.5858L7.29289 12.2929C7.68342 11.9024 8.31658 11.9024 8.70711 12.2929L11.7929 15.3787L15.2929 11.8787C15.6834 11.4882 16.3166 11.4882 16.7071 11.8787L21 16.1716V18.9C21 19.9167 20.9983 20.4839 20.9626 20.9072C20.9281 21.3162 20.8674 21.4836 20.8107 21.5894C20.702 21.7934 20.5433 21.952 20.3393 22.0607C20.2336 22.1174 20.0662 22.1781 19.6572 22.2126C19.2339 22.2483 18.6667 22.25 17.65 22.25H6.35C5.33328 22.25 4.76608 22.2483 4.34281 22.2126C3.93383 22.1781 3.76637 22.1174 3.66065 22.0607C3.45668 21.952 3.29803 21.7934 3.18934 21.5894C3.13263 21.4836 3.07188 21.3162 3.03741 20.9072C3.00167 20.4839 3 19.9167 3 18.9V16.5858Z" fill="currentColor"/>
+            <g transform="translate(0, 1)">
+              <path d="M4 8C4 6.89543 4.89543 6 6 6H8.17157C8.70201 6 9.21071 5.78929 9.58579 5.41421L10.5858 4.41421C10.9609 4.03914 11.4696 3.82843 12 3.82843H13C13.5304 3.82843 14.0391 4.03914 14.4142 4.41421L15.4142 5.41421C15.7893 5.78929 16.298 6 16.8284 6H19C20.1046 6 21 6.89543 21 8V18C21 19.1046 20.1046 20 19 20H6C4.89543 20 4 19.1046 4 18V8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12.5" cy="13" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            </g>
           </svg>
         `;
         uploadBtn.classList.add('visible'); // Start visible
@@ -348,7 +367,7 @@
 
           // Validate file type
           if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
+            alert('Please select a photo file');
             fileInput.value = '';
             return;
           }
@@ -357,7 +376,7 @@
           showStatus();
           updateStatus(
             'https://s3.amazonaws.com/com.voiceflow.studio/share/upload/upload.gif',
-            'Compressing image...'
+            'Compressing photo...'
           );
 
           try {
@@ -367,7 +386,7 @@
             // Analyze image and get permanent URL
             updateStatus(
               'https://s3.amazonaws.com/com.voiceflow.studio/share/upload/upload.gif',
-              'Analyzing and uploading...'
+              'Uploading photo...'
             );
             const result = await analyzeImage(compressedImage);
 
@@ -378,13 +397,13 @@
             // Show success
             updateStatus(
               'https://s3.amazonaws.com/com.voiceflow.studio/share/check/check.gif',
-              'Image uploaded!'
+              'Photo uploaded!'
             );
 
             // Send image URL in the message so agent can extract it and analyze
             window.voiceflow.chat.interact({
               type: 'text',
-              payload: `📸 Image uploaded: ${result.permanent_url}`
+              payload: `📸 Photo uploaded: ${result.permanent_url}`
             });
 
             // Cleanup
@@ -403,7 +422,7 @@
             // Send error to chat
             window.voiceflow.chat.interact({
               type: 'text',
-              payload: `❌ Image upload failed: ${error.message}`
+              payload: `❌ Photo upload failed: ${error.message}`
             });
 
             // Cleanup
